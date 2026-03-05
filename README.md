@@ -1,59 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Family Storage
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, fast, and feature‑rich private cloud storage built with **Laravel 11**, **React**, **Inertia.js**, and **Tailwind CSS**. Designed as a private family/personal drive with S3‑compatible backend storage.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Progressive Web App (PWA)
+- Installable on mobile (iOS/Android) and desktop devices.
+- Offline fallback capability.
+- Caching strategies for faster, native‑like load times.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Private & Secure
+- Invite‑only system: public registration is disabled. Only the owner can create users.
+- Secure login with a modern glassmorphism UI design.
 
-## Learning Laravel
+### Advanced File Management
+- Nested folders: create unlimited nested folder structures.
+- Chunked file uploads: upload massive files without hitting PHP timeout limits; chunks are sent directly to the storage backend.
+- Bulk operations: select multiple files/folders to move, delete, or download (as ZIP) simultaneously.
+- Trash & recovery: soft‑delete files and folders, with easy restore or permanent empty.
+- Dynamic views: toggle between grid and list layouts.
+- Lazy loading: high‑performance scrolling using Intersection Observer. Skeleton shimmers indicate loading states before fading in the actual content.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Inline File Previews
+- Native browser streaming: preview images, videos, audio, and PDFs directly in the browser without downloading.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Secure Public Sharing
+- Share files and folders via public URLs.
+- Password protection for shared links.
+- Expiration dates to automatically disable links after a set time.
+- Download limits to restrict the number of times a link can be used.
+- Public previews: recipients can view images, videos, audio, and PDFs directly from the shared link without an account.
 
-## Laravel Sponsors
+### Storage Monitoring
+- Real‑time dashboard widget showing total used storage capacity and file count.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Tech Stack
+- **Backend**: Laravel 11, PHP 8.2+
+- **Frontend**: React 18, Inertia.js (v2), Tailwind CSS
+- **Storage Backend**: AWS S3, MinIO, or Backbase (any S3‑compatible object storage)
+- **Database**: MySQL / PostgreSQL / SQLite
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Setup & Installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prerequisites
+- PHP 8.2 or higher
+- Composer
+- Node.js & npm
+- MinIO server (for local development)
 
-## Code of Conduct
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/your-username/family-storage.git
+cd family-storage
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Install PHP dependencies
+composer install
 
-## Security Vulnerabilities
+# Install npm dependencies
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Configure Environment (`.env`)
+Copy the environment template and generate an app key:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+Edit the `.env` file with your database credentials.
 
-## License
+### 3. Database Migration
+```bash
+php artisan migrate
+```
+*(Create an initial user manually via `php artisan tinker` because registration is disabled.)*
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Storage Configuration
+
+The application uses **S3‑compatible** storage.
+
+### Option A: Local Development with MinIO
+1. Start MinIO server:
+```bash
+minio server ~/minio-data --console-address ":9001"
+```
+2. Add the following to your `.env` (replace the keys with those printed by MinIO):
+```ini
+FILESYSTEM_DISK=s3
+
+AWS_ACCESS_KEY_ID=your-minio-access-key
+AWS_SECRET_ACCESS_KEY=your-minio-secret-key
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=family-storage
+AWS_URL=http://localhost:9000/family-storage
+AWS_ENDPOINT=http://localhost:9000
+AWS_USE_PATH_STYLE_ENDPOINT=true
+```
+Create a bucket named `family-storage` in the MinIO console and set its policy to public if needed.
+
+### Option B: Online Deployment (AWS S3 / Backbase)
+Add the typical S3 configuration to `.env`:
+```ini
+FILESYSTEM_DISK=s3
+
+AWS_ACCESS_KEY_ID=your-cloud-access-key
+AWS_SECRET_ACCESS_KEY=your-cloud-secret-key
+AWS_DEFAULT_REGION=ap-southeast-1
+AWS_BUCKET=your-bucket-name
+AWS_URL=https://your-bucket-name.s3.ap-southeast-1.amazonaws.com
+AWS_ENDPOINT=https://s3.ap-southeast-1.amazonaws.com
+AWS_USE_PATH_STYLE_ENDPOINT=false
+```
+Make sure the bucket’s CORS settings allow multipart uploads from your domain.
+
+---
+
+## Running the Application
+
+Open two terminals:
+
+**Backend**
+```bash
+php artisan serve
+```
+**Frontend (Vite HMR)**
+```bash
+npm run dev
+```
+Visit the URL shown (usually `http://localhost:8000`).
+
+### Building for Production
+```bash
+npm run build
+```
+This compiles assets and generates the service worker for the PWA.
+
+---
+
+## UI/UX Highlights
+- Glassmorphism login page with subtle gradients.
+- Synchronized dropdowns that close when clicking outside.
+- Contextual animations for a smooth user experience.
+
+---
+
+*Family Storage – a premium, private cloud storage solution.*
