@@ -8,6 +8,8 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import StorageWidget from '@/Components/StorageWidget';
+import LazyFileCard from '@/Components/LazyFileCard';
+import FileThumb from '@/Components/FileThumb';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import axios from 'axios';
 
@@ -578,136 +580,118 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                         </div>
 
                         <div className={viewMode === 'grid' ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6" : "space-y-2"}>
-                            {filteredFolders.map((f) => (
-                                <div
-                                    key={f.id}
-                                    className={`group relative border rounded-2xl hover:shadow-xl transition-all flex overflow-visible ${isSelected('folder', f.id) ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-500/20' : 'bg-white border-gray-100 hover:border-indigo-100'
-                                        } ${viewMode === 'grid' ? 'flex-col items-center p-6 h-52 justify-center text-center' : 'items-center px-6 py-4 justify-between h-16'}`}
-                                >
-                                    <div className={`absolute top-4 left-4 z-10 transition-opacity ${isSelected('folder', f.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                                        <input
-                                            type="checkbox"
-                                            checked={isSelected('folder', f.id)}
-                                            onChange={() => toggleSelection('folder', f.id)}
-                                            className="w-5 h-5 text-indigo-600 border-gray-300 rounded-md focus:ring-indigo-500 cursor-pointer"
-                                        />
-                                    </div>
-
-                                    <Link href={route('dashboard', f.id)} className={`flex ${viewMode === 'grid' ? 'flex-col items-center' : 'items-center'} flex-1 w-full overflow-hidden hover:opacity-80 transition-opacity`}>
-                                        <div className={`${viewMode === 'grid' ? 'mb-4' : 'mr-4'} relative`}>
-                                            <svg className={`${viewMode === 'grid' ? 'w-20 h-20' : 'w-10 h-10'} text-indigo-500 filter drop-shadow-sm`} fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                                            </svg>
+                            {filteredFolders.map((f, idx) => (
+                                <LazyFileCard key={f.id} index={idx}>
+                                    <div
+                                        className={`group relative border rounded-2xl hover:shadow-xl transition-all flex overflow-visible ${isSelected('folder', f.id) ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-500/20' : 'bg-white border-gray-100 hover:border-indigo-100'
+                                            } ${viewMode === 'grid' ? 'flex-col items-center p-6 h-52 justify-center text-center' : 'items-center px-6 py-4 justify-between h-16'}`}
+                                    >
+                                        <div className={`absolute top-4 left-4 z-10 transition-opacity ${isSelected('folder', f.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                            <input
+                                                type="checkbox"
+                                                checked={isSelected('folder', f.id)}
+                                                onChange={() => toggleSelection('folder', f.id)}
+                                                className="w-5 h-5 text-indigo-600 border-gray-300 rounded-md focus:ring-indigo-500 cursor-pointer"
+                                            />
                                         </div>
-                                        <span className={`text-sm font-bold truncate w-full text-gray-800 ${viewMode === 'grid' ? 'px-2' : 'text-left'}`}>{f.name}</span>
-                                    </Link>
 
-                                    <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-20`}>
-                                        <Dropdown>
-                                            <Dropdown.Trigger>
-                                                <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
-                                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                                                </button>
-                                            </Dropdown.Trigger>
-                                            <Dropdown.Content align="right" width="48" contentClasses="py-1 bg-white shadow-2xl rounded-xl border border-gray-50 ring-1 ring-black ring-opacity-5">
-                                                <button onClick={() => openShareModal('folder', f)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
-                                                    <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                                    Share Access
-                                                </button>
-                                                <button onClick={() => openMoveModal('folder', f)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
-                                                    <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                                                    Move Folder
-                                                </button>
-                                                <button onClick={() => deleteItem('folder', f.id)} className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition font-bold">
-                                                    <svg className="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                    To Trash
-                                                </button>
-                                            </Dropdown.Content>
-                                        </Dropdown>
+                                        <Link href={route('dashboard', f.id)} className={`flex ${viewMode === 'grid' ? 'flex-col items-center' : 'items-center'} flex-1 w-full overflow-hidden hover:opacity-80 transition-opacity`}>
+                                            <div className={`${viewMode === 'grid' ? 'mb-4' : 'mr-4'} relative`}>
+                                                <svg className={`${viewMode === 'grid' ? 'w-20 h-20' : 'w-10 h-10'} text-indigo-500 filter drop-shadow-sm`} fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                                                </svg>
+                                            </div>
+                                            <span className={`text-sm font-bold truncate w-full text-gray-800 ${viewMode === 'grid' ? 'px-2' : 'text-left'}`}>{f.name}</span>
+                                        </Link>
+
+                                        <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-20`}>
+                                            <Dropdown>
+                                                <Dropdown.Trigger>
+                                                    <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
+                                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                                    </button>
+                                                </Dropdown.Trigger>
+                                                <Dropdown.Content align="right" width="48" contentClasses="py-1 bg-white shadow-2xl rounded-xl border border-gray-50 ring-1 ring-black ring-opacity-5">
+                                                    <button onClick={() => openShareModal('folder', f)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
+                                                        <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                                        Share Access
+                                                    </button>
+                                                    <button onClick={() => openMoveModal('folder', f)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
+                                                        <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                                        Move Folder
+                                                    </button>
+                                                    <button onClick={() => deleteItem('folder', f.id)} className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition font-bold">
+                                                        <svg className="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                        To Trash
+                                                    </button>
+                                                </Dropdown.Content>
+                                            </Dropdown>
+                                        </div>
                                     </div>
-                                </div>
+                                </LazyFileCard>
                             ))}
 
-                            {filteredFiles.map((file) => (
-                                <div
-                                    key={file.id}
-                                    className={`group relative border rounded-2xl hover:shadow-xl transition-all flex overflow-visible ${isSelected('file', file.id) ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-500/20' : 'bg-white border-gray-100 hover:border-indigo-100'
-                                        } ${viewMode === 'grid' ? 'flex-col items-center p-6 h-52 justify-center text-center' : 'items-center px-6 py-4 justify-between h-16'}`}
-                                >
-                                    <div className={`absolute top-4 left-4 z-10 transition-opacity ${isSelected('file', file.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                                        <input
-                                            type="checkbox"
-                                            checked={isSelected('file', file.id)}
-                                            onChange={() => toggleSelection('file', file.id)}
-                                            className="w-5 h-5 text-indigo-600 border-gray-300 rounded-md focus:ring-indigo-500 cursor-pointer"
-                                        />
-                                    </div>
-
+                            {filteredFiles.map((file, idx) => (
+                                <LazyFileCard key={file.id} index={filteredFolders.length + idx}>
                                     <div
-                                        onClick={() => openPreview(file)}
-                                        className={`flex ${viewMode === 'grid' ? 'flex-col items-center' : 'items-center'} flex-1 w-full overflow-hidden cursor-pointer hover:opacity-80 transition-opacity`}
+                                        className={`group relative border rounded-2xl hover:shadow-xl transition-all flex overflow-visible ${isSelected('file', file.id) ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-500/20' : 'bg-white border-gray-100 hover:border-indigo-100'
+                                            } ${viewMode === 'grid' ? 'flex-col items-center p-6 h-52 justify-center text-center' : 'items-center px-6 py-4 justify-between h-16'}`}
                                     >
-                                        <div className={`${viewMode === 'grid' ? 'mb-4' : 'mr-4'} relative flex items-center justify-center`}>
-                                            {file.mime_type?.startsWith('image/') ? (
-                                                <div className={`${viewMode === 'grid' ? 'w-24 h-24' : 'w-10 h-10'} relative group/img`}>
-                                                    <div className="absolute inset-0 flex items-center justify-center z-0">
-                                                        <svg className={`${viewMode === 'grid' ? 'w-16 h-16' : 'w-8 h-8'} text-gray-200`} fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                    <img
-                                                        src={route('preview.show', file.id)}
-                                                        alt=""
-                                                        loading="lazy"
-                                                        className={`relative z-10 w-full h-full object-cover rounded-xl shadow-sm border border-gray-100 transition-transform group-hover/img:scale-105`}
-                                                        onLoad={(e) => e.target.style.opacity = 1}
-                                                        style={{ opacity: 0 }}
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <svg className={`${viewMode === 'grid' ? 'w-20 h-20' : 'w-10 h-10'} text-gray-300`} fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-                                                </svg>
-                                            )}
+                                        <div className={`absolute top-4 left-4 z-10 transition-opacity ${isSelected('file', file.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                            <input
+                                                type="checkbox"
+                                                checked={isSelected('file', file.id)}
+                                                onChange={() => toggleSelection('file', file.id)}
+                                                className="w-5 h-5 text-indigo-600 border-gray-300 rounded-md focus:ring-indigo-500 cursor-pointer"
+                                            />
                                         </div>
-                                        <div className={`overflow-hidden w-full ${viewMode === 'grid' ? 'px-2' : 'text-left'}`}>
-                                            <span className="text-sm font-bold truncate block text-gray-700">{file.original_name}</span>
-                                            <span className="text-[10px] uppercase font-black text-gray-400 tracking-wider">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
-                                        </div>
-                                    </div>
 
-                                    <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-20`}>
-                                        <Dropdown>
-                                            <Dropdown.Trigger>
-                                                <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
-                                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                                                </button>
-                                            </Dropdown.Trigger>
-                                            <Dropdown.Content align="right" width="48" contentClasses="py-1 bg-white shadow-2xl rounded-xl border border-gray-50 ring-1 ring-black ring-opacity-5">
-                                                <button onClick={() => openPreview(file)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
-                                                    <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                    Preview
-                                                </button>
-                                                <a href={route('files.download', file.id)} className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
-                                                    <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                                    Download
-                                                </a>
-                                                <button onClick={() => openShareModal('file', file)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
-                                                    <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                                    Get Link
-                                                </button>
-                                                <button onClick={() => openMoveModal('file', file)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
-                                                    <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                                                    Move Item
-                                                </button>
-                                                <button onClick={() => deleteItem('file', file.id)} className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition font-bold">
-                                                    <svg className="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                    To Trash
-                                                </button>
-                                            </Dropdown.Content>
-                                        </Dropdown>
+                                        <div
+                                            onClick={() => openPreview(file)}
+                                            className={`flex ${viewMode === 'grid' ? 'flex-col items-center' : 'items-center'} flex-1 w-full overflow-hidden cursor-pointer hover:opacity-80 transition-opacity`}
+                                        >
+                                            <div className={`${viewMode === 'grid' ? 'mb-4' : 'mr-4'} relative flex items-center justify-center`}>
+                                                <FileThumb file={file} viewMode={viewMode} />
+                                            </div>
+                                            <div className={`overflow-hidden w-full ${viewMode === 'grid' ? 'px-2' : 'text-left'}`}>
+                                                <span className="text-sm font-bold truncate block text-gray-700">{file.original_name}</span>
+                                                <span className="text-[10px] uppercase font-black text-gray-400 tracking-wider">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                                            </div>
+                                        </div>
+
+                                        <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-20`}>
+                                            <Dropdown>
+                                                <Dropdown.Trigger>
+                                                    <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
+                                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                                    </button>
+                                                </Dropdown.Trigger>
+                                                <Dropdown.Content align="right" width="48" contentClasses="py-1 bg-white shadow-2xl rounded-xl border border-gray-50 ring-1 ring-black ring-opacity-5">
+                                                    <button onClick={() => openPreview(file)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
+                                                        <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                        Preview
+                                                    </button>
+                                                    <a href={route('files.download', file.id)} className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
+                                                        <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                                        Download
+                                                    </a>
+                                                    <button onClick={() => openShareModal('file', file)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
+                                                        <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                                        Get Link
+                                                    </button>
+                                                    <button onClick={() => openMoveModal('file', file)} className="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 transition border-b border-gray-50">
+                                                        <svg className="w-4 h-4 mr-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                                        Move Item
+                                                    </button>
+                                                    <button onClick={() => deleteItem('file', file.id)} className="flex items-center w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition font-bold">
+                                                        <svg className="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                        To Trash
+                                                    </button>
+                                                </Dropdown.Content>
+                                            </Dropdown>
+                                        </div>
                                     </div>
-                                </div>
+                                </LazyFileCard>
                             ))}
                         </div>
                     </div>
