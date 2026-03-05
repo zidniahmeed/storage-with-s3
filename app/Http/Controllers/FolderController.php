@@ -41,12 +41,17 @@ class FolderController extends Controller
             ->orderBy('name')
             ->get();
 
+        $storageUsed = File::where('user_id', $userId)->sum('size');
+        $totalFiles = File::where('user_id', $userId)->count();
+
         return Inertia::render('Dashboard', [
             'folder' => $folder,
             'folders' => $folders,
             'files' => $files,
             'breadcrumbs' => $breadcrumbs,
             'allFolders' => $allFolders,
+            'storageUsed' => (int) $storageUsed,
+            'totalFiles' => (int) $totalFiles,
         ]);
     }
 

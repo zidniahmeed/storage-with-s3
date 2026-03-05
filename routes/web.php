@@ -7,6 +7,7 @@ use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\ShareController;
+use App\Http\Controllers\StorageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -61,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/api/storage/summary', [StorageController::class, 'summary'])->name('storage.summary');
 });
 
 require __DIR__ . '/auth.php';

@@ -7,10 +7,11 @@ import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
+import StorageWidget from '@/Components/StorageWidget';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import axios from 'axios';
 
-export default function Dashboard({ folder, folders, files, breadcrumbs, allFolders }) {
+export default function Dashboard({ folder, folders, files, breadcrumbs, allFolders, storageUsed, totalFiles }) {
     const [viewMode, setViewMode] = useState('grid');
     const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -373,7 +374,10 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                         </div>
                     </div>
 
-                    <div className="flex  items-center space-x-3">
+                    <div className="flex items-center space-x-3">
+                        <div className="hidden md:block">
+                            <StorageWidget storageUsed={storageUsed} totalFiles={totalFiles} />
+                        </div>
                         {folder && (
                             <button
                                 onClick={requestZip}
@@ -557,7 +561,7 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                         </div>
 
                         {/* Mobile Search Bar */}
-                        <div className="md:hidden mb-6">
+                        <div className="md:hidden mb-6 space-y-3">
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -570,6 +574,7 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                                     className="block w-full pl-11 pr-4 py-3 bg-gray-50 border-gray-100 rounded-2xl text-sm focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all shadow-sm"
                                 />
                             </div>
+                            <StorageWidget storageUsed={storageUsed} totalFiles={totalFiles} />
                         </div>
 
                         <div className={viewMode === 'grid' ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6" : "space-y-2"}>
