@@ -1,6 +1,6 @@
 # Family Storage
 
-A modern, fast, and feature‑rich private cloud storage built with **Laravel 11**, **React**, **Inertia.js**, and **Tailwind CSS**. Designed as a private family/personal drive with S3‑compatible backend storage.
+A modern, fast, and feature‑rich private cloud storage built with **Laravel 12.53.0**, **React**, **Inertia.js**, and **Tailwind CSS**. Designed as a private family/personal drive with S3‑compatible backend storage.
 
 ---
 
@@ -39,7 +39,7 @@ A modern, fast, and feature‑rich private cloud storage built with **Laravel 11
 ---
 
 ## Tech Stack
-- **Backend**: Laravel 11, PHP 8.2+
+- **Backend**: Laravel 12.53.0, PHP 8.2+
 - **Frontend**: React 18, Inertia.js (v2), Tailwind CSS
 - **Storage Backend**: AWS S3, MinIO, or Backbase (any S3‑compatible object storage)
 - **Database**: MySQL / PostgreSQL / SQLite
@@ -148,6 +148,17 @@ This compiles assets and generates the service worker for the PWA.
 - Glassmorphism login page with subtle gradients.
 - Synchronized dropdowns that close when clicking outside.
 - Contextual animations for a smooth user experience.
+
+## Screenshots
+
+![Dashboard view](/Users/zidni/Herd/family-storage/screenshot/dashboard.png)
+*Dashboard overview with file grid.*
+
+![Upload queue](/Users/zidni/Herd/family-storage/screenshot/upload-queue.png)
+*Upload queue showing progress of chunked uploads.*
+
+![Mobile view](/Users/zidni/Herd/family-storage/screenshot/mobile-view.png)
+*Responsive mobile layout.*
 
 ---
 
