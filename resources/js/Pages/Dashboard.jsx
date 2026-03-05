@@ -33,6 +33,7 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
     const folderInputRef = useRef(null);
     const [isDraggingGlobal, setIsDraggingGlobal] = useState(false);
     const dragCounter = useRef(0);
+    const [activeDropdownId, setActiveDropdownId] = useState(null);
 
     const { data: folderData, setData: setFolderData, post: postFolder, processing: processingFolder, reset: resetFolder } = useForm({
         name: '',
@@ -586,7 +587,7 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                                         className={`group relative border rounded-2xl hover:shadow-xl transition-all flex overflow-visible ${isSelected('folder', f.id) ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-500/20' : 'bg-white border-gray-100 hover:border-indigo-100'
                                             } ${viewMode === 'grid' ? 'flex-col items-center p-6 h-52 justify-center text-center' : 'items-center px-6 py-4 justify-between h-16'}`}
                                     >
-                                        <div className={`absolute top-4 left-4 z-10 transition-opacity ${isSelected('folder', f.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                        <div className={`absolute top-4 left-4 transition-opacity ${isSelected('folder', f.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                                             <input
                                                 type="checkbox"
                                                 checked={isSelected('folder', f.id)}
@@ -604,8 +605,11 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                                             <span className={`text-sm font-bold truncate w-full text-gray-800 ${viewMode === 'grid' ? 'px-2' : 'text-left'}`}>{f.name}</span>
                                         </Link>
 
-                                        <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-20`}>
-                                            <Dropdown>
+                                        <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-50`}>
+                                            <Dropdown
+                                                open={activeDropdownId === `folder-${f.id}`}
+                                                onOpenChange={(open) => setActiveDropdownId(open ? `folder-${f.id}` : null)}
+                                            >
                                                 <Dropdown.Trigger>
                                                     <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
                                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
@@ -637,7 +641,7 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                                         className={`group relative border rounded-2xl hover:shadow-xl transition-all flex overflow-visible ${isSelected('file', file.id) ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-500/20' : 'bg-white border-gray-100 hover:border-indigo-100'
                                             } ${viewMode === 'grid' ? 'flex-col items-center p-6 h-52 justify-center text-center' : 'items-center px-6 py-4 justify-between h-16'}`}
                                     >
-                                        <div className={`absolute top-4 left-4 z-10 transition-opacity ${isSelected('file', file.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                        <div className={`absolute top-4 left-4 transition-opacity ${isSelected('file', file.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                                             <input
                                                 type="checkbox"
                                                 checked={isSelected('file', file.id)}
@@ -660,7 +664,10 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                                         </div>
 
                                         <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-50`}>
-                                            <Dropdown>
+                                            <Dropdown
+                                                open={activeDropdownId === `file-${file.id}`}
+                                                onOpenChange={(open) => setActiveDropdownId(open ? `file-${file.id}` : null)}
+                                            >
                                                 <Dropdown.Trigger>
                                                     <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
                                                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>

@@ -1,14 +1,23 @@
 import { Transition } from '@headlessui/react';
 import { Link } from '@inertiajs/react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 
 const DropDownContext = createContext();
 
-const Dropdown = ({ children }) => {
-    const [open, setOpen] = useState(false);
+const Dropdown = ({ children, open: controlledOpen, onOpenChange }) => {
+    const [internalOpen, setInternalOpen] = useState(false);
+
+    const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+    const setOpen = (value) => {
+        if (onOpenChange) {
+            onOpenChange(value);
+        }
+        setInternalOpen(value);
+    };
 
     const toggleOpen = () => {
-        setOpen((previousState) => !previousState);
+        setOpen(!open);
     };
 
     return (
@@ -25,11 +34,12 @@ const Trigger = ({ children }) => {
         <>
             <div onClick={toggleOpen}>{children}</div>
 
-            {open && (
+            {open && createPortal(
                 <div
-                    className="fixed inset-0 z-40"
+                    className="fixed inset-0 z-[9998]"
                     onClick={() => setOpen(false)}
-                ></div>
+                />,
+                document.body
             )}
         </>
     );
@@ -42,46 +52,73 @@ const Content = ({
     children,
 }) => {
     const { open, setOpen } = useContext(DropDownContext);
+    const anchorRef = useRef(null);
+    const [pos, setPos] = useState({ top: 0, left: 0, right: 0 });
 
-    let alignmentClasses = 'origin-top';
+    const updatePos = useCallback(() => {
+        if (anchorRef.current && open) {
+            const rect = anchorRef.current.getBoundingClientRect();
+            setPos({
+                top: rect.bottom + 8,
+                left: rect.left,
+                right: window.innerWidth - rect.right,
+            });
+        }
+    }, [open]);
 
-    if (align === 'left') {
-        alignmentClasses = 'ltr:origin-top-left rtl:origin-top-right start-0';
-    } else if (align === 'right') {
-        alignmentClasses = 'ltr:origin-top-right rtl:origin-top-left end-0';
-    }
+    useEffect(() => {
+        updatePos();
+        if (open) {
+            window.addEventListener('scroll', updatePos, true);
+            window.addEventListener('resize', updatePos);
+            return () => {
+                window.removeEventListener('scroll', updatePos, true);
+                window.removeEventListener('resize', updatePos);
+            };
+        }
+    }, [open, updatePos]);
 
     let widthClasses = '';
-
     if (width === '48') {
         widthClasses = 'w-48';
     }
 
+    const alignStyle = align === 'left'
+        ? { left: pos.left }
+        : { right: pos.right };
+
     return (
         <>
-            <Transition
-                show={open}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-            >
-                <div
-                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
-                    onClick={() => setOpen(false)}
+            {/* Hidden anchor to track position */}
+            <div ref={anchorRef} className="absolute top-full right-0 left-0 h-0 pointer-events-none" />
+
+            {open && createPortal(
+                <Transition
+                    show={open}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
                 >
                     <div
-                        className={
-                            `rounded-md ring-1 ring-black ring-opacity-5 ` +
-                            contentClasses
-                        }
+                        className={`fixed z-[9999] rounded-md shadow-lg ${widthClasses}`}
+                        style={{ top: pos.top, ...alignStyle }}
+                        onClick={() => setOpen(false)}
                     >
-                        {children}
+                        <div
+                            className={
+                                `rounded-md ring-1 ring-black ring-opacity-5 ` +
+                                contentClasses
+                            }
+                        >
+                            {children}
+                        </div>
                     </div>
-                </div>
-            </Transition>
+                </Transition>,
+                document.body
+            )}
         </>
     );
 };
