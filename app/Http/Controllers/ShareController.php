@@ -132,4 +132,42 @@ class ShareController extends Controller
             }
         }
     }
+    public function preview(Request $request, $uuid, File $file = null)
+    {
+        $share = Share::where('uuid', $uuid)->firstOrFail();
+
+        // Standard validations
+        if ($share->expires_at && $share->expires_at->isPast()) abort(410);
+        if ($share->password && !$request->session()->get("share_auth_{$share->id}")) abort(403);
+
+        if ($share->shareable_type === 'App\Models\File') {
+            $file = $share->shareable;
+        } else {
+            // If sharing a folder, ensure the requested file belongs to that folder
+            if (!$file || $file->folder_id !== $share->shareable_id) abort(404);
+        }
+
+        $disk = Storage::disk($file->disk);
+
+        if (!$disk->exists($file->path)) {
+            abort(404);
+        }
+
+        $mimeType = $file->mime_type;
+
+        // Allow previewing common formats
+        if (
+            str_starts_with($mimeType, 'image/') ||
+            $mimeType === 'application/pdf' ||
+            str_starts_with($mimeType, 'video/') ||
+            str_starts_with($mimeType, 'audio/') ||
+            str_starts_with($mimeType, 'text/') ||
+            $mimeType === 'application/json' ||
+            $mimeType === 'application/javascript'
+        ) {
+            return $disk->response($file->path);
+        }
+
+        abort(415, 'File type not supported for preview.');
+    }
 }

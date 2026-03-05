@@ -40,9 +40,48 @@ export default function PublicShare({ share, file, folder, folders, files }) {
                     </div>
 
                     {file && (
-                        <div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-lg">
-                            <p className="text-gray-600 mb-4">File preview is not available here. Download to view.</p>
-                            <span className="text-sm text-gray-400">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <div className="flex flex-col items-center justify-center py-10 bg-gray-50 rounded-xl border border-gray-100 mt-6 overflow-hidden relative">
+                            {file.mime_type?.startsWith('image/') ? (
+                                <img
+                                    src={route('shares.preview', { uuid: share.uuid, file: file.id })}
+                                    alt={file.original_name}
+                                    className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-sm"
+                                    loading="lazy"
+                                />
+                            ) : file.mime_type?.startsWith('video/') ? (
+                                <video
+                                    src={route('shares.preview', { uuid: share.uuid, file: file.id })}
+                                    controls
+                                    className="max-w-full max-h-[70vh] rounded-lg shadow-sm bg-black"
+                                >
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : file.mime_type?.startsWith('audio/') ? (
+                                <audio
+                                    src={route('shares.preview', { uuid: share.uuid, file: file.id })}
+                                    controls
+                                    className="w-full max-w-md my-8"
+                                >
+                                    Your browser does not support the audio element.
+                                </audio>
+                            ) : file.mime_type === 'application/pdf' ? (
+                                <embed
+                                    src={route('shares.preview', { uuid: share.uuid, file: file.id })}
+                                    type="application/pdf"
+                                    className="w-full h-[75vh] rounded-lg"
+                                />
+                            ) : (
+                                <div className="py-20 text-center">
+                                    <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                                    </svg>
+                                    <p className="text-gray-600 mb-2 font-medium text-lg">Preview not available</p>
+                                    <p className="text-sm text-gray-500 max-w-sm mx-auto">This file type ({file.mime_type || 'Unknown'}) cannot be previewed. Please download it to view the contents.</p>
+                                    <span className="inline-block mt-4 px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-xs font-bold">
+                                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     )}
 

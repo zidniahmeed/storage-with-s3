@@ -48,6 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/s/{uuid}', [ShareController::class, 'show'])->name('shares.show');
 Route::post('/s/{uuid}/auth', [ShareController::class, 'authenticate'])->name('shares.auth');
 Route::get('/s/{uuid}/download/{file?}', [ShareController::class, 'download'])->name('shares.download');
+Route::get('/s/{uuid}/preview/{file?}', [ShareController::class, 'preview'])->name('shares.preview');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

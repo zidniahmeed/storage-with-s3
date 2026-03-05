@@ -659,7 +659,7 @@ export default function Dashboard({ folder, folders, files, breadcrumbs, allFold
                                             </div>
                                         </div>
 
-                                        <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-20`}>
+                                        <div className={`${viewMode === 'grid' ? 'absolute top-4 right-4' : ''} z-50`}>
                                             <Dropdown>
                                                 <Dropdown.Trigger>
                                                     <button className="p-2 hover:bg-indigo-50 rounded-full text-gray-400 hover:text-indigo-600 transition-colors">
