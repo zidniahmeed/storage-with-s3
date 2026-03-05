@@ -149,40 +149,55 @@ This compiles assets and generates the service worker for the PWA.
 - Synchronized dropdowns that close when clicking outside.
 - Contextual animations for a smooth user experience.
 
-## Screenshots
+## User Interface Overview
 
-![Action menu](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/action-menu.png)
-*Action menu dropdown.*
+### Dashboard and Navigation
+A clean, modern interface designed for fast file browsing and organization.
 
 ![Dashboard view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/dashboard.png)
-*Dashboard overview with file grid.*
-
-![Detail storage size](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/detail-storage-size.png)
-*Storage usage details.*
-
-![Mobile view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/mobile-view.png)
-*Responsive mobile layout.*
-
-![Move file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/move-file.png)
-*Moving files between folders.*
-
-![Multiple select](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/multilple-select.png)
-*Selecting multiple items.*
-
-![Preview file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/preview-file.png)
-*File preview modal.*
-
-![Share file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/share-file.png)
-*Public sharing options.*
+*Main dashboard with glassmorphism elements and file grid.*
 
 ![Tab view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/tab-view.png)
-*Tab navigation view.*
+*Organized folder tabs for easy navigation.*
 
-![Trash page](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/trash-pge.png)
-*Trash page with deleted items.*
+### File Management and Operations
+Powerful tools to manage your data with ease, including bulk actions and intuitive menus.
+
+![Multiple select](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/multilple-select.png)
+*Select multiple files or folders for bulk operations.*
+
+![Action menu](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/action-menu.png)
+*Contextual action menu for quick access to file options.*
+
+![Move file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/move-file.png)
+*Dedicated modal for moving files and folders across hierarchies.*
+
+### Media Previews and Secure Sharing
+Experience your media directly in the browser and share it safely with others.
+
+![Preview file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/preview-file.png)
+*Rich inline previews for images, videos, audio, and documents.*
+
+![Share file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/share-file.png)
+*Public sharing with password protection and expiration limits.*
+
+### Performance and Storage Monitoring
+Keep track of large uploads and monitor your total disk usage in real-time.
 
 ![Upload queue](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/upload-queue.png)
-*Upload queue showing progress of chunked uploads.*
+*Chunked upload progress tracking for massive files.*
+
+![Detail storage size](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/detail-storage-size.png)
+*Storage capacity analytics and usage breakdown.*
+
+### Mobile Experience and Data Recovery
+Fully optimized for mobile devices and protected against accidental deletions.
+
+![Mobile view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/mobile-view.png)
+*Highly responsive PWA experience for mobile and tablet users.*
+
+![Trash page](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/trash-pge.png)
+*Trash bin system for recovering or permanently deleting files.*
 
 ---
 
