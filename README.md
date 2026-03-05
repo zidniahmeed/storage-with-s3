@@ -151,15 +151,42 @@ This compiles assets and generates the service worker for the PWA.
 
 ## Screenshots
 
-![Dashboard view](/Users/zidni/Herd/family-storage/screenshot/dashboard.png)
+![Action menu](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/action-menu.png)
+*Action menu dropdown.*
+
+![Dashboard view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/dashboard.png)
 *Dashboard overview with file grid.*
 
-![Upload queue](/Users/zidni/Herd/family-storage/screenshot/upload-queue.png)
-*Upload queue showing progress of chunked uploads.*
+![Detail storage size](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/detail-storage-size.png)
+*Storage usage details.*
 
-![Mobile view](/Users/zidni/Herd/family-storage/screenshot/mobile-view.png)
+![Mobile view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/mobile-view.png)
 *Responsive mobile layout.*
 
+![Move file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/move-file.png)
+*Moving files between folders.*
+
+![Multiple select](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/multilple-select.png)
+*Selecting multiple items.*
+
+![Preview file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/preview-file.png)
+*File preview modal.*
+
+![Share file](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/share-file.png)
+*Public sharing options.*
+
+![Tab view](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/tab-view.png)
+*Tab navigation view.*
+
+![Trash page](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/trash-pge.png)
+*Trash page with deleted items.*
+
+![Upload queue](https://raw.githubusercontent.com/zidniahmeed/storage-with-s3/main/public/screenshot/upload-queue.png)
+*Upload queue showing progress of chunked uploads.*
+
 ---
+
+> **Repository:** https://github.com/zidniahmeed/storage-with-s3
+
 
 *Family Storage – a premium, private cloud storage solution.*
